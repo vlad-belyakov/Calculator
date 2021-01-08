@@ -45,6 +45,31 @@ public class Calculator {
         deletingVoids();
         workingOnMinuses();
     }
+    //Добавление пробелов в выражние для его дальнейшего раздробления в массив для работы
+    private String spaces(String a) {
+        a = a.replace("+", " + ");
+        a = a.replace("-", " - ");
+        a = a.replace("/", " / ");
+        a = a.replace("*", " * ");
+        a = a.replace("^", " ^ ");
+        a = a.replace("root", " root ");
+        a = a.replace("(", "( ");
+        a = a.replace(")", " )");
+        a = a.replace("=", " =");
+        a = a.replace("sin", " sin ");
+        a = a.replace("cos", " cos ");
+        a = a.replace("tg", " tg ");
+        a = a.replace("ctg", " ctg ");
+        a = a.replace("[", "[ ");
+        a = a.replace("]", " ]");
+        return a;
+    }
+    //Ошибки
+    private Validate validate(String primer){
+        var va = new Validate(primer);
+        va.validateRun();
+        return va;
+    }
     //Удаление пустот в выражении
     private ArrayList<String> deletingVoids() {
         for(int i = 0; i < this.list.size(); i++){
@@ -63,8 +88,6 @@ public class Calculator {
                 this.list.remove(i);
             }
             else if((comparisonOperators(this.list.get(i), operatorp)) &&(this.list.get(i + 1).equals("-"))){
-                //var p = this.list.get(i + 1);
-                //var ii = Integer.parseInt(this.list.get(i + 1));
                 this.list.set(i + 1, "-1");
                 this.list.add(i + 2, "*");
             }
@@ -202,26 +225,6 @@ public class Calculator {
         return d = Double.parseDouble(s);
     }
 
-    //Добавление пробелов в выражние для его дальнейшего раздробления в массив для работы
-    private String spaces(String a) {
-        a = a.replace("+", " + ");
-        a = a.replace("-", " - ");
-        a = a.replace("/", " / ");
-        a = a.replace("*", " * ");
-        a = a.replace("^", " ^ ");
-        a = a.replace("root", " root ");
-        a = a.replace("(", "( ");
-        a = a.replace(")", " )");
-        a = a.replace("=", " =");
-        a = a.replace("sin", " sin ");
-        a = a.replace("cos", " cos ");
-        a = a.replace("tg", " tg ");
-        a = a.replace("ctg", " ctg ");
-        a = a.replace("[", "[ ");
-        a = a.replace("]", " ]");
-        return a;
-    }
-
     //Проверка выражения на операторы
     private boolean checkOperators(String a, ArrayList<String> list){
         return list.contains(a);
@@ -286,6 +289,8 @@ public class Calculator {
         }
         return null;
     }
+
+
     //Отправка на разлиные проверки и действия
     public Calculator calc() {
         while (this.list.size() > 1) {
@@ -311,6 +316,8 @@ public class Calculator {
         }
         return this;
     }
+
+
     //Проверка на скобки в выражении
     private boolean existSkobka(ArrayList<String> list) {
         return list.contains("(") && list.contains(")");
@@ -323,6 +330,7 @@ public class Calculator {
     private boolean existTrig(ArrayList<String> list){
         return list.contains("sin") || list.contains("cos") || list.contains("tg") || list.contains("ctg");
     }
+
     //Нахождение индекса вхождения скобок в строку
     private Brackets brackets() {
         int opbracket = 0;
@@ -353,6 +361,7 @@ public class Calculator {
         }
         return new Brackets(opAbsbracket,clAbsbracket);
     }
+
     //"мини" выражение - выражение в одно действие
     //Вырезание "мини" выражения для подсчета в скобках
     private Brackets getCuttedList(){
@@ -374,6 +383,7 @@ public class Calculator {
         br.list = nlist;
         return br;
     }
+
     //Замена "мини" выражения на ответ
     private void changeResult(Result res, ArrayList<String> list) {
         if (existTrig(list)) {
@@ -400,15 +410,9 @@ public class Calculator {
             list.subList(br.opbrackets+1, br.clbrackets+1).clear();
         }
     }
+
     //Вывод ответа
     public String getResult(){
             return this.list.get(0).replace(".0", "");
     }
-    //Ошибки
-    private Validate validate(String primer){
-        var va = new Validate(primer);
-        va.validateRun();
-        return va;
-    }
-
 }
