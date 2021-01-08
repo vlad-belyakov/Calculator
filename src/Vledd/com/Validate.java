@@ -8,7 +8,7 @@ public class Validate {
     public Validate(String primer) {
         this.primer = primer;
     }
-    public void run(){
+    public void validateRun(){
         if(primer.isEmpty())
             this.textError = "Введите хоть что-то";
         else if(containsChar(primer,'(') != containsChar(primer, ')')) {
