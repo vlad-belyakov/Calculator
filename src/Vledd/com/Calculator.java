@@ -44,7 +44,7 @@ public class Calculator {
         deletingVoids();
         workingOnMinuses();
     }
-
+    //Удаление пустот в выражении
     private ArrayList<String> deletingVoids() {
         for(int i = 0; i < this.list.size(); i++){
             if(this.list.get(i).equals("")){
@@ -54,7 +54,7 @@ public class Calculator {
         }
         return this.list;
     }
-
+    //Работа с минусами
     private ArrayList<String> workingOnMinuses() {
         for (int i = 0; (i < this.list.size() - 1) && (this.list.size() > 1); i++) {
             if ((i == 0) && (this.list.get(i).equals("-"))) {
@@ -79,7 +79,7 @@ public class Calculator {
         }
         return this.list;
     }
-
+    //Есть ли определенные символы в строке
     private boolean comparisonOperators(String b, ArrayList<String> list){
         boolean check = false;
         for(int i = 0; i < list.size() - 1; i++){
@@ -91,121 +91,117 @@ public class Calculator {
         return check;
     }
 
-    //Умножение
+    //Вычисления
+    //Вычисление умножения
     private double multiplication(double a,double b){
         var res = a * b;
         System.out.println( a + " * " + b + " = " + res);
         return res;
     }
-    //Деление
+    //Вычисление деления
     private double dividing(double a,double b){
         var res = a / b;
         System.out.println( a + " / " + b + " = " + res);
         return res;
     }
-    //Вычитание
+    //Вычисление разности
     private double subtraction(double a,double b){
         var res = a - b;
         System.out.println( a + " - " + b + " = " + res);
         return res;
     }
-    //Сложение
+    //Вычисление суммы
     private double summ(double a,double b){
         var res = a + b;
         System.out.println( a + " + " + b + " = " + res);
         return res;
     }
-    //Степень
+    //Вычисление степени
     private double level(double a, double b){
         var res = Math.pow(a, b);
         System.out.println( a + "^" + b + " = " + res);
         return res;
     }
-    //Корень
+    //Вычисление корня
     private double root(double a, double b){
         var res = Math.pow(a, 1/b);
         System.out.println( b + "√" + a + " = " + res);
         return res;
     }
     //Тригонометрические функции
-    //double value = 34.766674;
-    //DecimalFormat decimalFormat = new DecimalFormat( "#.###" );
-    //String result = decimalFormat.format(value);
-    //System.out.print(result);
-    ////34,767
+    //Вычисление синуса
     private double sinus(double a, double b){
         var res =  convertFromFloatToDub(convertFromDubToFloat(Math.sin(Math.toRadians(b))));
         System.out.println("sin" + b + " = " + res);
         return res;
     }
-
+    //Вычисление косинуса
     private double cosinus(double a, double b){
         var res =  convertFromFloatToDub(convertFromDubToFloat(Math.cos(Math.toRadians(b))));
         System.out.println("cos" + b + " = " + res);
         return res;
     }
-
+    //Вычисление тангенса
     private double tangens(double a, double b){
         var res =  convertFromFloatToDub(convertFromDubToFloat(Math.tan(Math.toRadians(b))));
         System.out.println("tg" + b + " = " + res);
         return res;
     }
-
+    //Вычисление котангенса
     private double cotangens(double a, double b){
         var res =  convertFromFloatToDub(convertFromDubToFloat(1 / Math.tan(Math.toRadians(b))));
         System.out.println("ctg" + b + " = " + res);
         return res;
     }
-    //операции
+
+    //Отправка "мини" выражений на вычисления по операторам
     private double operator(double a, String c, double b) {
-        if (c.equals("*")) {
-            return multiplication(a, b);
-        } else if (c.equals("/")) {
-            return dividing(a, b);
-        } else if (c.equals("+")) {
-            return summ(a, b);
-        } else if (c.equals("-")) {
-            return subtraction(a, b);
-        } else if (c.equals("^")) {
-            return level(a, b);
-        } else if (c.equals("root")) {
-            return root(a, b);
-        } else if (c.equals("sin")) {
-            return sinus(a, b);
-        } else if (c.equals("cos")) {
-            return cosinus(a, b);
-        } else if (c.equals("tg")) {
-            return tangens(a, b);
-        } else if(c.equals("ctg")) {
-            return cotangens(a, b);
-        } else {
-            return 0;
-        }
+        return switch (c) {
+            case "*" -> multiplication(a, b);
+            case "/" -> dividing(a, b);
+            case "+" -> summ(a, b);
+            case "-" -> subtraction(a, b);
+            case "^" -> level(a, b);
+            case "root" -> root(a, b);
+            case "sin" -> sinus(a, b);
+            case "cos" -> cosinus(a, b);
+            case "tg" -> tangens(a, b);
+            case "ctg" -> cotangens(a, b);
+            default -> 0;
+        };
     }
 
-    private double convertFromStToDub(String ch) {
-        return Double.parseDouble(ch);
-    }
+    //Конвертации
+    //Конвертация числа из строки в тип int
     private int converFromStToInt(String ch){
         return Integer.valueOf(ch);
     }
+    //Конвертация числа из типа int в строку
     private String convertFromIntToSt(int ch){
         return String.valueOf(ch);
     }
+    //Конвертация числа из строкив тип double
+    private double convertFromStToDub(String ch) {
+        return Double.parseDouble(ch);
+    }
+    //Конвертация числа из типа double в cтроку
     private String convertFromDubToSt(double ch) {
         return String.valueOf(ch);
     }
+    //Конвертация числа из типа double в тип float
     private float convertFromDubToFloat(double ch){
         var s = String.valueOf(ch);
         float f;
         return  f = Float.parseFloat(s);
     }
+    //Конвертация числа из типа float в тип double
     private double convertFromFloatToDub(float ch){
         var s = String.valueOf(ch);
         double d;
         return d = Double.parseDouble(s);
     }
 
+    //Добавление пробелов в выражние для его дальнейшего раздробления в массив для работы
     private String spaces(String a) {
         a = a.replace("+", " + ");
         a = a.replace("-", " - ");
@@ -225,10 +221,11 @@ public class Calculator {
         return a;
     }
 
+    //Проверка выражения на операторы
     private boolean checkOperators(String a, ArrayList<String> list){
         return list.contains(a);
     }
-
+    //Отправка "мини" выражений, исходя из операторов
     private Result run(ArrayList<String> list)  {
         while(checkOperators("sin", list) || checkOperators("cos", list) || checkOperators("tg", list) || checkOperators("ctg", list)) {
             for (int index=0; index < list.size(); index++) {
@@ -288,7 +285,7 @@ public class Calculator {
         }
         return null;
     }
-
+    //Отправка на разлиные проверки и действия
     public Calculator calc() {
         while (this.list.size() > 1) {
             Result res = new Result("0", 0);
@@ -310,63 +307,22 @@ public class Calculator {
                 res = this.run(this.list);
                 changeResult(res, this.list);
             }
-            System.out.println(this.list);
         }
         return this;
     }
-    /*public Calculator calc2() {
-        while (this.list.size() > 1) {
-            if (existSkobka(list)){
-                Result res = new Result("0", 0);
-                var cut = getCuttedAbsList();
-                res = this.run(cut.list);
-                while(cut.list.size() > 1) {
-                    if (existTrig(cut.list)) {
-                        changeResult(res, cut.list);
-                    } else if (existAbs(cut.list)) {
-                        changeResultAbs(res, cut);
-                    } else {
-                        changeResult(res, cut.list);
-                    }
-                }
-                changeResultBr(res, cut);
-            }
-             else if (existAbs(list)) {
-                var cut = getCuttedList();
-                Result res = new Result("0", 0);
-                while (cut.list.size() > 1) {
-                    if (existTrig(cut.list)) {
-                        run(cut.
-                        changeResult(res, cut.list);
-                    } else if (existSkobka(cut.list)) {
-                        changeResultBr(res, cut);
-                    } else {
-                        changeResult(res, cut.list);
-                    }
-                }
-                changeResultAbs(res, cut);
-            } else {
-                 Result res = new Result("0", 0);
-                res = this.run(this.list);
-                changeResult(res, this.list);
-            }
-        }
-        return this;
-    }*/
-
+    //Проверка на скобки в выражении
     private boolean existSkobka(ArrayList<String> list) {
         return list.contains("(") && list.contains(")");
     }
-
+    //Проверка на модули в выражении
     private boolean existAbs(ArrayList<String> list){
         return list.contains("[") && list.contains("]");
     }
-
+    //Проверка на тригонометрические функции
     private boolean existTrig(ArrayList<String> list){
         return list.contains("sin") || list.contains("cos") || list.contains("tg") || list.contains("ctg");
     }
-
-
+    //Нахождение индекса вхождения скобок в строку
     private Brackets brackets() {
         int opbracket = 0;
         int clbracket = 0;
@@ -381,7 +337,7 @@ public class Calculator {
         }
         return new Brackets(opbracket,clbracket);
     }
-
+    //Нахождение индекса входа модулей в строку
     private Brackets absBrackets() {
         int opAbsbracket = 0;
         int clAbsbracket = 0;
@@ -396,7 +352,8 @@ public class Calculator {
         }
         return new Brackets(opAbsbracket,clAbsbracket);
     }
-
+    //"мини" выражение - выражение в одно действие
+    //Вырезание "мини" выражения для подсчета в скобках
     private Brackets getCuttedList(){
         var nlist = new ArrayList<String>();
         var br = brackets();
@@ -406,7 +363,7 @@ public class Calculator {
         br.list = nlist;
         return br;
     }
-
+    //Вырезание "мини" выражения для подсчета в модуле
     private Brackets getCuttedAbsList(){
         var nlist = new ArrayList<String>();
         var br = absBrackets();
@@ -416,7 +373,7 @@ public class Calculator {
         br.list = nlist;
         return br;
     }
-
+    //Замена "мини" выражения на ответ
     private void changeResult(Result res, ArrayList<String> list) {
         if (existTrig(list)) {
             list.set(res.Index, res.Chislo);
@@ -427,14 +384,14 @@ public class Calculator {
             list.remove(res.Index-1);
         }
     }
-
+    //Замена "мини" выражения на ответ в скобках
     private void changeResultBr(Result res, Brackets br) {
         list.set(br.opbrackets, res.Chislo);
         if (br.clbrackets >= br.opbrackets + 1) {
             list.subList(br.opbrackets+1, br.clbrackets+1).clear();
         }
     }
-
+    //Замена "мини" выражения на ответ в модуле
     private void changeResultAbs(Result res, Brackets br) {
         var i = res.Chislo.replace("-", "");
         list.set(br.opbrackets, i);
@@ -442,11 +399,11 @@ public class Calculator {
             list.subList(br.opbrackets+1, br.clbrackets+1).clear();
         }
     }
-
+    //Вывод ответа
     public String getResult(){
             return this.list.get(0).replace(".0", "");
     }
-
+    //Ошибки
     private Validate validate(String primer){
         var va = new Validate(primer);
         va.validateRun();
