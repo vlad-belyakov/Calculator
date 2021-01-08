@@ -30,6 +30,7 @@ public class Calculator {
         add("(");
         //add(")");
     }};
+
     public Calculator(String primer) throws Exception {
         var v = validate(primer);
         if (v.existError) {
