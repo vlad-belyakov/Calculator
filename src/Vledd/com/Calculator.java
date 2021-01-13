@@ -180,19 +180,30 @@ public class Calculator {
 
     //Отправка "мини" выражений на вычисления по операторам
     private double operator(double a, String c, double b) {
-        return switch (c) {
-            case "*" -> multiplication(a, b);
-            case "/" -> dividing(a, b);
-            case "+" -> summ(a, b);
-            case "-" -> subtraction(a, b);
-            case "^" -> level(a, b);
-            case "root" -> root(a, b);
-            case "sin" -> sinus(b);
-            case "cos" -> cosinus(b);
-            case "tg" -> tangens(b);
-            case "ctg" -> cotangens(b);
-            default -> 0;
-        };
+        switch (c) {
+            case "*":
+                return multiplication(a, b);
+            case "/":
+                return dividing(a, b);
+            case "+":
+                return summ(a, b);
+            case "-":
+                return subtraction(a, b);
+            case "^":
+                return level(a, b);
+            case "root":
+                return root(a, b);
+            case "sin":
+                return sinus(b);
+            case "cos":
+                return cosinus(b);
+            case "tg":
+                return tangens(b);
+            case "ctg":
+                return cotangens(b);
+            default:
+                return 0;
+        }
     }
 
     //Конвертации
