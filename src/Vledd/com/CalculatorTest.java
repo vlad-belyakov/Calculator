@@ -1,4 +1,4 @@
-package Vledd.com.test;
+package Vledd.com;
 
 import Vledd.com.Calculator;
 import org.junit.jupiter.api.Assertions;
