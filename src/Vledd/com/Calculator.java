@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class Calculator {
     private ArrayList<String> list;
-    ArrayList<String> operatorz = new ArrayList<String>()
+    ArrayList<String> operatorz = new ArrayList<>()
     {{
         add("root");
         add("^");
@@ -23,7 +23,7 @@ public class Calculator {
         add(")");*/
         add("-");
     }};
-    ArrayList<String> operatorp = new ArrayList<String>()
+    ArrayList<String> operatorp = new ArrayList<>()
     {{
         add("[");
         //add("]");
@@ -154,25 +154,25 @@ public class Calculator {
     }
     //Тригонометрические функции
     //Вычисление синуса
-    private double sinus(double a, double b){
+    private double sinus(double b){
         var res =  convertFromFloatToDub(convertFromDubToFloat(Math.sin(Math.toRadians(b))));
         System.out.println("sin" + b + " = " + res);
         return res;
     }
     //Вычисление косинуса
-    private double cosinus(double a, double b){
+    private double cosinus(double b){
         var res =  convertFromFloatToDub(convertFromDubToFloat(Math.cos(Math.toRadians(b))));
         System.out.println("cos" + b + " = " + res);
         return res;
     }
     //Вычисление тангенса
-    private double tangens(double a, double b){
+    private double tangens(double b){
         var res =  convertFromFloatToDub(convertFromDubToFloat(Math.tan(Math.toRadians(b))));
         System.out.println("tg" + b + " = " + res);
         return res;
     }
     //Вычисление котангенса
-    private double cotangens(double a, double b){
+    private double cotangens(double b){
         var res =  convertFromFloatToDub(convertFromDubToFloat(1 / Math.tan(Math.toRadians(b))));
         System.out.println("ctg" + b + " = " + res);
         return res;
@@ -187,10 +187,10 @@ public class Calculator {
             case "-" -> subtraction(a, b);
             case "^" -> level(a, b);
             case "root" -> root(a, b);
-            case "sin" -> sinus(a, b);
-            case "cos" -> cosinus(a, b);
-            case "tg" -> tangens(a, b);
-            case "ctg" -> cotangens(a, b);
+            case "sin" -> sinus(b);
+            case "cos" -> cosinus(b);
+            case "tg" -> tangens(b);
+            case "ctg" -> cotangens(b);
             default -> 0;
         };
     }
@@ -215,14 +215,12 @@ public class Calculator {
     //Конвертация числа из типа double в тип float
     private float convertFromDubToFloat(double ch){
         var s = String.valueOf(ch);
-        float f;
-        return  f = Float.parseFloat(s);
+        return  Float.parseFloat(s);
     }
     //Конвертация числа из типа float в тип double
     private double convertFromFloatToDub(float ch){
         var s = String.valueOf(ch);
-        double d;
-        return d = Double.parseDouble(s);
+        return Double.parseDouble(s);
     }
 
     //Проверка выражения на операторы
