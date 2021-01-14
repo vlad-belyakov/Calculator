@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Calculator {
-    private ArrayList<String> list;
+    public ArrayList<String> list;
     ArrayList<String> operatorz = new ArrayList<>()
     {{
         add("root");
@@ -71,17 +71,16 @@ public class Calculator {
         return va;
     }
     //Удаление пустот в выражении
-    private ArrayList<String> deletingVoids() {
+    private void deletingVoids() {
         for(int i = 0; i < this.list.size(); i++){
             if(this.list.get(i).equals("")){
                 this.list.remove(i);
                 i--;
             }
         }
-        return this.list;
     }
     //Работа с минусами
-    private ArrayList<String> workingOnMinuses() {
+    private void workingOnMinuses() {
         for (int i = 0; (i < this.list.size() - 1) && (this.list.size() > 1); i++) {
             if ((i == 0) && (this.list.get(i).equals("-"))) {
                 this.list.set(i + 1, convertFromIntToSt(-1 * Integer.parseInt(this.list.get(i + 1))));
@@ -101,7 +100,7 @@ public class Calculator {
                 this.list.add(i + 2, "*");
             }
         }
-        return this.list;
+
     }
     //Есть ли определенные символы в строке
     private boolean comparisonOperators(String b, ArrayList<String> list){
@@ -300,31 +299,37 @@ public class Calculator {
     }
 
 
-    //Отправка на разлиные проверки и действия
-    public Calculator calc() {
-        while (this.list.size() > 1) {
+    //Отправка на различные проверки и действия
+    public Calculator calc(ArrayList<String> list) {
+        while (list.size() > 1) {
             Result res = new Result("0", 0);
             if (existAbs(list)) {
-                var cut = getCuttedAbsList();
+                var cut = getCuttedAbsList(list);
                 while (cut.list.size() > 1) {
-                    res = this.run(cut.list);
-                    changeResult(res, cut.list);
+                    if(existSkobka(cut.list) || existAbs(cut.list)) {
+                        calc(cut.list);
+                    }
+                    else {
+                        res = this.run(cut.list);
+                        changeResult(res, cut.list);
+                    }
                 }
                 changeResultAbs(res, cut);
             } else if (existSkobka(list)) {
-                var cut = getCuttedList();
+                var cut = getCuttedList(list);
                 while (cut.list.size() > 1) {
                     res = this.run(cut.list);
                     changeResult(res, cut.list);
                 }
                 changeResultBr(res, cut);
             } else {
-                res = this.run(this.list);
-                changeResult(res, this.list);
+                res = this.run(list);
+                changeResult(res, list);
             }
         }
         return this;
     }
+
 
 
     //Проверка на скобки в выражении
@@ -341,7 +346,7 @@ public class Calculator {
     }
 
     //Нахождение индекса вхождения скобок в строку
-    private Brackets brackets() {
+    private Brackets brackets(ArrayList<String> list) {
         int opbracket = 0;
         int clbracket = 0;
         for(int i = 0; i < list.size(); i++){
@@ -356,7 +361,7 @@ public class Calculator {
         return new Brackets(opbracket,clbracket);
     }
     //Нахождение индекса входа модулей в строку
-    private Brackets absBrackets() {
+    private Brackets absBrackets(ArrayList<String> list) {
         int opAbsbracket = 0;
         int clAbsbracket = 0;
         for(int i = 0; i < list.size(); i++){
@@ -373,9 +378,9 @@ public class Calculator {
 
     //"мини" выражение - выражение в одно действие
     //Вырезание "мини" выражения для подсчета в скобках
-    private Brackets getCuttedList(){
+    private Brackets getCuttedList(ArrayList<String> list){
         var nlist = new ArrayList<String>();
-        var br = brackets();
+        var br = brackets(list);
         for(int i = br.opbrackets + 1; i < br.clbrackets; i++) {
             nlist.add(list.get(i));
         }
@@ -383,9 +388,9 @@ public class Calculator {
         return br;
     }
     //Вырезание "мини" выражения для подсчета в модуле
-    private Brackets getCuttedAbsList(){
+    private Brackets getCuttedAbsList(ArrayList<String> list){
         var nlist = new ArrayList<String>();
-        var br = absBrackets();
+        var br = absBrackets(list);
         for(int i = br.opbrackets + 1; i < br.clbrackets ; i++) {
             nlist.add(list.get(i));
         }

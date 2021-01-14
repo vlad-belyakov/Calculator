@@ -10,6 +10,6 @@ public class Main {
 
         var calc = new Calculator(line);
 
-        System.out.println("Ответ : " + calc.calc().getResult());
+        System.out.println("Ответ : " + calc.calc(calc.list).getResult());
     }
 }

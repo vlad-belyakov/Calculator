@@ -17,18 +17,20 @@ class CalculatorTest {
     @MethodSource("Data")
     public void TestCalc(String primer, String otvet) throws Exception {
         var c = new Calculator(primer);
-        c.calc();
+        c.calc(c.list);
         Assertions.assertEquals(otvet, c.getResult());
     }
 
     public static List<Object[]> Data() {
         return Arrays.asList(new Object[][]{
-            {"0+0","0"},
-            {"0+1","1"},
-            {"1+99","100"},
-            {"1+1-(2+2)","-2"},
-            {"1-1","0"},
-            {"2*2","4"}
+                {"1--1","2"},
+                {"1+1","2"},
+                {"[2-4]","2"},
+                {"2+(sin30*8)/2","4"},
+                {"(1+1)","2"},
+                {"(2*(16/2)+[3-10*sin30])","18"},
+                {"[-4*(32-28)/sin30]","32"},
+                {"[-4*(32-(28-2))/sin30]","48"}
         });
     }
 }
