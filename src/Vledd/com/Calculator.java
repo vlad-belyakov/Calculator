@@ -65,7 +65,7 @@ public class Calculator {
         return a;
     }
     //Ошибки
-    private Validate validate(String primer){
+    Validate validate(String primer){
         var va = new Validate(primer);
         va.validateRun();
         return va;
