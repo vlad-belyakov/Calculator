@@ -208,7 +208,7 @@ public class Calculator {
     //Конвертации
     //Конвертация числа из строки в тип int
     private int converFromStToInt(String ch){
-        return Integer.valueOf(ch);
+        return Integer.parseInt(ch);
     }
     //Конвертация числа из типа int в строку
     private String convertFromIntToSt(int ch){
@@ -306,7 +306,7 @@ public class Calculator {
             if (existAbs(list)) {
                 var cut = getCuttedAbsList(list);
                 while (cut.list.size() > 1) {
-                    if(existSkobka(cut.list) || existAbs(cut.list)) {
+                    if(existSkobka(cut.list)) {
                         calc(cut.list);
                     }
                     else {
@@ -314,14 +314,14 @@ public class Calculator {
                         changeResult(res, cut.list);
                     }
                 }
-                changeResultAbs(res, cut);
+                changeResultAbs(res, cut, list);
             } else if (existSkobka(list)) {
                 var cut = getCuttedList(list);
                 while (cut.list.size() > 1) {
                     res = this.run(cut.list);
                     changeResult(res, cut.list);
                 }
-                changeResultBr(res, cut);
+                changeResultBr(res, cut, list);
             } else {
                 res = this.run(list);
                 changeResult(res, list);
@@ -410,14 +410,14 @@ public class Calculator {
         }
     }
     //Замена "мини" выражения на ответ в скобках
-    private void changeResultBr(Result res, Brackets br) {
+    private void changeResultBr(Result res, Brackets br, ArrayList<String> list) {
         list.set(br.opbrackets, res.Chislo);
         if (br.clbrackets >= br.opbrackets + 1) {
             list.subList(br.opbrackets+1, br.clbrackets+1).clear();
         }
     }
     //Замена "мини" выражения на ответ в модуле
-    private void changeResultAbs(Result res, Brackets br) {
+    private void changeResultAbs(Result res, Brackets br, ArrayList<String> list) {
         var i = res.Chislo.replace("-", "");
         list.set(br.opbrackets, i);
         if (br.clbrackets >= br.opbrackets + 1) {
