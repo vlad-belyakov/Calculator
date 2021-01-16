@@ -301,8 +301,8 @@ public class Calculator {
 
     //Отправка на различные проверки и действия
     public Calculator calc(ArrayList<String> list) {
+        Result res = new Result("0", 0);
         while (list.size() > 1) {
-            Result res = new Result("0", 0);
             if (existAbs(list)) {
                 var cut = getCuttedAbsList(list);
                 while (cut.list.size() > 1) {
