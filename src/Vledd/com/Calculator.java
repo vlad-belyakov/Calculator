@@ -207,7 +207,7 @@ public class Calculator {
 
     //Конвертации
     //Конвертация числа из строки в тип int
-    private int converFromStToInt(String ch){
+    private int convertFromStToInt(String ch){
         return Integer.parseInt(ch);
     }
     //Конвертация числа из типа int в строку
