@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Calculator {
+    Result res2 = new Result("0", 0);
     public ArrayList<String> list;
     ArrayList<String> operatorz = new ArrayList<>()
     {{
@@ -308,6 +309,7 @@ public class Calculator {
                 while (cut.list.size() > 1) {
                     if(existSkobka(cut.list)) {
                         calc(cut.list);
+                        res = res2;
                     }
                     else {
                         res = this.run(cut.list);
@@ -327,6 +329,7 @@ public class Calculator {
                 changeResult(res, list);
             }
         }
+        res2 = res;
         return this;
     }
 
