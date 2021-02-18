@@ -5,35 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Calculator {
-    Result res2 = new Result("0", 0);
+    private Result res2 = new Result("0", 0);
     public ArrayList<String> list;
-    ArrayList<String> operatorz = new ArrayList<>()
-    {{
-        add("root");
-        add("^");
-        add("*");
-        add("+");
-        add("sin");
-        add("cos");
-        add("tg");
-        add("ctg");
-        add("/");
-        /*add("[");
-        add("]");
-        add("(");
-        add(")");*/
-        add("-");
-    }};
-    ArrayList<String> operatorp = new ArrayList<>()
-    {{
-        add("[");
-        //add("]");
-        add("(");
-        //add(")");
-    }};
 
     public Calculator(String primer) throws Exception {
-        var v = validate(primer);
+        var v =  validate(primer);
         if (v.existError) {
             throw new Exception(v.textError);
         }
@@ -80,101 +56,138 @@ public class Calculator {
             }
         }
     }
-    //Работа с минусами
+    //Работа с минусами(это не метод, а костыли какие-то)
     private void workingOnMinuses() {
-        for (int i = 0; (i < this.list.size() - 1) && (this.list.size() > 1); i++) {
-            if ((i == 0) && (this.list.get(i).equals("-"))) {
-                this.list.set(i + 1, convertFromIntToSt(-1 * Integer.parseInt(this.list.get(i + 1))));
-                this.list.remove(i);
+        Compariable c = new Compariable();
+        for (int i = 0; (i < list.size() - 1) && (list.size() > 1); i++) {
+            if(i == 0 && list.get(i).equals("-") && list.get(i + 1).equals("-")){
+                list.remove(i);
+                list.remove(i);
             }
-            else if((comparisonOperators(this.list.get(i), operatorp)) &&(this.list.get(i + 1).equals("-"))){
-                this.list.set(i + 1, "-1");
-                this.list.add(i + 2, "*");
+            else if(i == 1 && c.includeDigits(list.get(i)) && list.get(i - 1).equals("-")){
+                list.set(i - 1, "-1");
+                list.add(i , "*");
             }
-            else if((this.list.get(i).equals("-")) && (this.list.get(i + 1).equals("-"))){
-                this.list.set(i + 1, "+");
-                this.list.remove(i);
+            else if(i == 1  && list.get(0).equals("-") && list.get(1).equals("-")) {
+                list.remove(1);
+                list.remove(0);
                 i--;
             }
-            else if((i > 0) && comparisonOperators(this.list.get(i), operatorz) && (this.list.get(i + 1).equals("-"))){
+            else if ((!c.includeDigits(list.get(i))) && (list.get(i + 1).equals("-"))) {
+                this.list.set(i + 1, "-1");
+                this.list.add(i + 2, "*");
+            }
+            else if((c.include(list.get(i), c.bracketsOperators)) &&(list.get(i + 1).equals("-"))){
+                this.list.set(i + 1, "-1");
+                this.list.add(i + 2, "*");
+            }
+            else if((this.list.get(i).equals("-")) && (list.get(i + 1).equals("-"))){
+                this.list.set(i , "-1");
+                this.list.add(i + 1, "*");
+                i--;
+            }
+            else if((i > 0) && c.include(list.get(i), c.allOperators) && (list.get(i + 1).equals("-"))){
                 this.list.set(i + 1, "-1");
                 this.list.add(i + 2, "*");
             }
         }
-
     }
-    //Есть ли определенные символы в строке
-    private boolean comparisonOperators(String b, ArrayList<String> list){
-        boolean check = false;
-        for(int i = 0; i < list.size() - 1; i++){
-            if(b.equals(list.get(i))){
-                check = true;
-                break;
+    /*private void workingOnMinuses2(){
+        Compariable c = new Compariable();
+        for (int i = 0; (i < this.list.size() - 1) && (this.list.size() > 1); i++) {
+            if(i == 0 && list.get(i).equals("-") && list.get(i + 1).equals("-")){
+               list.remove(i);
+               list.remove(i);
+            } else if( i > 0 && c.include(list.get(i), c.bracketsOperators) && list.get(i + 2).equals("-") && list.get(i + 1).equals("-")){
+               list.remove(i + 1);
+               list.remove(i + 1);
+               i--;
+            } else if(i == 1  && list.get(0).equals("-") && list.get(1).equals("-")){
+                list.remove(1);
+                list.remove(0);
+                i--;
+            } else if(c.includeDigits(list.get(i)) && list.get(i + 1).equals("-") && list.get(i + 2).equals("-")){
+                list.set(i + 1, "+");
+                list.remove(i + 2);
+            } else if(list.get(i + 1).equals("-") && !list.get(i).equals("-") && c.include(list.get(i) , c.allOperators)){
+                list.set(i + 1, "-1");
+                list.add(i + 2, "*");
+            } else if(!list.get(i).equals("-") && c.include(list.get(i), list.get(i + 1), c.allOperators)){
+                list.remove(i);
+                i--;
+            } else if(list.get(i).equals("-") && c.includeDigits(list.get(i + 1)) && !list.get(i -1).equals("-")){
+                list.set(i + 1, convertFromDubToSt(-1.0 * convertFromStToDub(list.get(i + 1))));
+                list.remove(i);
+            } else if(list.get(i).equals("-") && c.include(list.get(i + 1), c.bracketsOperators)){
+                list.set(i, "-1");
+                list.add(i + 1, "*");
+            } else if(i > 2 && c.includeDigits(list.get(i)) && list.get(i - 1).equals("-") && c.includeDigits(list.get(i - 2), c.allOperators)){
+                list.set(i - 1, "-1");
+                list.add(i, "*");тут не те списки в условии
             }
         }
-        return check;
-    }
+    }*/
 
     //Вычисления
     //Вычисление умножения
     private double multiplication(double a,double b){
         var res = a * b;
-        System.out.println( a + " * " + b + " = " + res);
+        System.out.println((a + " * " + b + " = " + res).replace(".0", ""));
         return res;
     }
     //Вычисление деления
     private double dividing(double a,double b){
         var res = a / b;
-        System.out.println( a + " / " + b + " = " + res);
+        System.out.println((a + " / " + b + " = " + res).replace(".0", ""));
         return res;
     }
     //Вычисление разности
     private double subtraction(double a,double b){
         var res = a - b;
-        System.out.println( a + " - " + b + " = " + res);
+        System.out.println((a + " - " + b + " = " + res).replace(".0", ""));
         return res;
     }
     //Вычисление суммы
     private double summ(double a,double b){
         var res = a + b;
-        System.out.println( a + " + " + b + " = " + res);
+        System.out.println((a + " + " + b + " = " + res).replace(".0", ""));
         return res;
     }
     //Вычисление степени
     private double level(double a, double b){
         var res = Math.pow(a, b);
-        System.out.println( a + "^" + b + " = " + res);
+        System.out.println((a + "^" + b + " = " + res).replace(".0", ""));
         return res;
     }
     //Вычисление корня
     private double root(double a, double b){
         var res = Math.pow(a, 1/b);
-        System.out.println( b + "√" + a + " = " + res);
+        System.out.println((b + "√" + a + " = " + res).replace(".0", ""));
         return res;
     }
     //Тригонометрические функции
     //Вычисление синуса
     private double sinus(double b){
         var res =  convertFromFloatToDub(convertFromDubToFloat(Math.sin(Math.toRadians(b))));
-        System.out.println("sin" + b + " = " + res);
+        System.out.println(("sin" + b + " = " + res).replace(".0", ""));
         return res;
     }
     //Вычисление косинуса
-    private double cosinus(double b){
-        var res =  convertFromFloatToDub(convertFromDubToFloat(Math.cos(Math.toRadians(b))));
-        System.out.println("cos" + b + " = " + res);
+        private double cosinus ( double b){
+        var res = convertFromFloatToDub(convertFromDubToFloat(Math.cos(Math.toRadians(b))));
+        System.out.println(("cos" + b + " = " + res).replace(".0", ""));
         return res;
     }
     //Вычисление тангенса
     private double tangens(double b){
         var res =  convertFromFloatToDub(convertFromDubToFloat(Math.tan(Math.toRadians(b))));
-        System.out.println("tg" + b + " = " + res);
+        System.out.println(("tg" + b + " = " + res).replace(".0", ""));
         return res;
     }
     //Вычисление котангенса
     private double cotangens(double b){
         var res =  convertFromFloatToDub(convertFromDubToFloat(1 / Math.tan(Math.toRadians(b))));
-        System.out.println("ctg" + b + " = " + res);
+        System.out.println(("ctg" + b + " = " + res).replace(".0", ""));
         return res;
     }
 
@@ -241,22 +254,31 @@ public class Calculator {
     //Отправка "мини" выражений, исходя из операторов
     private Result run(ArrayList<String> list)  {
         while(checkOperators("sin", list) || checkOperators("cos", list) || checkOperators("tg", list) || checkOperators("ctg", list)) {
-            for (int index=0; index < list.size(); index++) {
-                if (list.get(index).equals("sin")) {
-                    var result = operator(0, "sin", convertFromStToDub(list.get(index+1)));
-                    return new Result(convertFromDubToSt(result), index);
+            for (int i=0; i < list.size(); i++) {
+                if (list.get(i).equals("sin")) {
+                    var result = operator(0, "sin", convertFromStToDub(list.get(i+1)));
+                    return new Result(convertFromDubToSt(result), i);
                 }
-                else if (list.get(index).equals("cos")) {
-                    var result = operator(0, "cos", convertFromStToDub(list.get(index+1)));
-                    return new Result(convertFromDubToSt(result), index);
+                else if (list.get(i).equals("cos")) {
+                    var result = operator(0, "cos", convertFromStToDub(list.get(i+1)));
+                    return new Result(convertFromDubToSt(result), i);
                 }
-                else if (list.get(index).equals("tg")) {
-                    var result = operator(0, "tg", convertFromStToDub(list.get(index+1)));
-                    return new Result(convertFromDubToSt(result), index);
+                else if (list.get(i).equals("tg")) {
+                    if(!(convertFromStToInt(list.get(i + 1)) % 90 == 0)) {
+                        var result = operator(0, "tg", convertFromStToDub(list.get(i + 1)));
+                        return new Result(convertFromDubToSt(result), i);
+                    } else {
+                        throw new ArithmeticException("Такого тангенса не существует(комплексные числа, привет)");
+                    }
                 }
-                else if (list.get(index).equals("ctg")) {
-                    var result = operator(0, "ctg", convertFromStToDub(list.get(index+1)));
-                    return new Result(convertFromDubToSt(result), index);
+                else if (list.get(i).equals("ctg")) {
+                    if(!((convertFromStToInt(list.get(i + 1)) % 180 == 0) && (list.get(i + 1).equals("0")))) {
+                        var result = operator(0, "ctg", convertFromStToDub(list.get(i + 1)));
+                        return new Result(convertFromDubToSt(result), i);
+                    }
+                    else{
+                        throw new ArithmeticException("Такого котангенса не существует(комплексные числа, привет)");
+                    }
                 }
             }
         }
@@ -267,8 +289,13 @@ public class Calculator {
                     return new Result(convertFromDubToSt(result), index);
                 }
                 else if (list.get(index).equals("root") && index != 0) {
-                    var result = operator(convertFromStToDub(list.get(index-1)), "root", convertFromStToDub(list.get(index+1)));
-                    return new Result(convertFromDubToSt(result), index);
+                    if (!list.get(index - 1).startsWith("-")) {
+                        var result = operator(convertFromStToDub(list.get(index - 1)), "root", convertFromStToDub(list.get(index + 1)));
+                        return new Result(convertFromDubToSt(result), index);
+                    }
+                    else {
+                        throw new ArithmeticException("Подкорневое выражение не может быть меньше нуля");
+                    }
                 }
             }
         }
@@ -279,8 +306,13 @@ public class Calculator {
                     return new Result(convertFromDubToSt(result), index);
                 }
                 else if (list.get(index).equals("/") && index != 0) {
-                    var result = operator(convertFromStToDub(list.get(index-1)), "/", convertFromStToDub(list.get(index+1)));
-                    return new Result(convertFromDubToSt(result), index);
+                    if (!list.get(index + 1).equals("0")){
+                        var result = operator(convertFromStToDub(list.get(index - 1)), "/", convertFromStToDub(list.get(index + 1)));
+                        return new Result(convertFromDubToSt(result), index);
+                    }
+                    else{
+                        throw new ArithmeticException("Нельзя делить на ноль, ибо я еще не знаю, что такое комплексные числа, поэтому и тебе нельзя");
+                    }
                 }
             }
         }
@@ -306,24 +338,35 @@ public class Calculator {
         while (list.size() > 1) {
             if (existAbs(list)) {
                 var cut = getCuttedAbsList(list);
-                while (cut.list.size() > 1) {
-                    if(existSkobka(cut.list)) {
-                        calc(cut.list);
-                        res = res2;
+                if(cut.list.size() == 1){
+                    res = new Result(cut.list.get(0), 0);
+                    changeResultInAbs(res, cut, list);
+                }
+                else {
+                    while (cut.list.size() > 1) {
+                        if (existSkobka(cut.list)) {
+                            calc(cut.list);
+                            res = res2;
+                        } else {
+                            res = this.run(cut.list);
+                            changeResult(res, cut.list);
+                        }
                     }
-                    else {
+                    changeResultInAbs(res, cut, list);
+                }
+            } else if (existSkobka(list)) {
+                var cut = getCuttedBracketsList(list);
+                if(cut.list.size() == 1){
+                    res = new Result(cut.list.get(0), cut.opbrackets);
+                    changeResultInBrackets(res, cut, list);
+                }
+                else {
+                    while (cut.list.size() > 1) {
                         res = this.run(cut.list);
                         changeResult(res, cut.list);
                     }
+                    changeResultInBrackets(res, cut, list);
                 }
-                changeResultAbs(res, cut, list);
-            } else if (existSkobka(list)) {
-                var cut = getCuttedList(list);
-                while (cut.list.size() > 1) {
-                    res = this.run(cut.list);
-                    changeResult(res, cut.list);
-                }
-                changeResultBr(res, cut, list);
             } else {
                 res = this.run(list);
                 changeResult(res, list);
@@ -350,38 +393,38 @@ public class Calculator {
 
     //Нахождение индекса вхождения скобок в строку
     private Brackets brackets(ArrayList<String> list) {
-        int opbracket = 0;
-        int clbracket = 0;
+        int opBracket = 0;
+        int clBracket = 0;
         for(int i = 0; i < list.size(); i++){
             if(list.get(i).equals("(")){
-                opbracket = i;
+                opBracket = i;
             }
             else if(list.get(i).equals(")")){
-                clbracket = i;
+                clBracket = i;
                 break;
             }
         }
-        return new Brackets(opbracket,clbracket);
+        return new Brackets(opBracket,clBracket);
     }
     //Нахождение индекса входа модулей в строку
     private Brackets absBrackets(ArrayList<String> list) {
-        int opAbsbracket = 0;
-        int clAbsbracket = 0;
+        int opAbsBracket = 0;
+        int clAbsBracket = 0;
         for(int i = 0; i < list.size(); i++){
             if(list.get(i).equals("[")){
-                opAbsbracket = i;
+                opAbsBracket = i;
             }
             else if(list.get(i).equals("]")){
-                clAbsbracket = i;
+                clAbsBracket = i;
                 break;
             }
         }
-        return new Brackets(opAbsbracket,clAbsbracket);
+        return new Brackets(opAbsBracket,clAbsBracket);
     }
 
     //"мини" выражение - выражение в одно действие
     //Вырезание "мини" выражения для подсчета в скобках
-    private Brackets getCuttedList(ArrayList<String> list){
+    private Brackets getCuttedBracketsList(ArrayList<String> list){
         var nlist = new ArrayList<String>();
         var br = brackets(list);
         for(int i = br.opbrackets + 1; i < br.clbrackets; i++) {
@@ -413,14 +456,14 @@ public class Calculator {
         }
     }
     //Замена "мини" выражения на ответ в скобках
-    private void changeResultBr(Result res, Brackets br, ArrayList<String> list) {
+    private void changeResultInBrackets(Result res, Brackets br, ArrayList<String> list) {
         list.set(br.opbrackets, res.Chislo);
         if (br.clbrackets >= br.opbrackets + 1) {
             list.subList(br.opbrackets+1, br.clbrackets+1).clear();
         }
     }
     //Замена "мини" выражения на ответ в модуле
-    private void changeResultAbs(Result res, Brackets br, ArrayList<String> list) {
+    private void changeResultInAbs(Result res, Brackets br, ArrayList<String> list) {
         var i = res.Chislo.replace("-", "");
         list.set(br.opbrackets, i);
         if (br.clbrackets >= br.opbrackets + 1) {
