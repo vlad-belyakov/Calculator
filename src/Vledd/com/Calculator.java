@@ -63,70 +63,29 @@ public class Calculator {
             if(i == 0 && list.get(i).equals("-") && list.get(i + 1).equals("-")){
                 list.remove(i);
                 list.remove(i);
-            }
-            else if(i == 1 && c.includeDigits(list.get(i)) && list.get(i - 1).equals("-")){
+            } else if(i == 1 && c.includeDigits(list.get(i)) && list.get(i - 1).equals("-")){
                 list.set(i - 1, "-1");
                 list.add(i , "*");
-            }
-            else if(i == 1  && list.get(0).equals("-") && list.get(1).equals("-")) {
+            } else if(i == 1  && list.get(0).equals("-") && list.get(1).equals("-")) {
                 list.remove(1);
                 list.remove(0);
                 i--;
-            }
-            else if ((!c.includeDigits(list.get(i))) && (list.get(i + 1).equals("-"))) {
-                this.list.set(i + 1, "-1");
-                this.list.add(i + 2, "*");
-            }
-            else if((c.include(list.get(i), c.bracketsOperators)) &&(list.get(i + 1).equals("-"))){
-                this.list.set(i + 1, "-1");
-                this.list.add(i + 2, "*");
-            }
-            else if((this.list.get(i).equals("-")) && (list.get(i + 1).equals("-"))){
-                this.list.set(i , "-1");
-                this.list.add(i + 1, "*");
+            } else if ((!c.includeDigits(list.get(i))) && (list.get(i + 1).equals("-"))) {
+                list.set(i + 1, "-1");
+                list.add(i + 2, "*");
+            } else if((c.include(list.get(i), c.bracketsOperators)) &&(list.get(i + 1).equals("-"))){
+                list.set(i + 1, "-1");
+                list.add(i + 2, "*");
+            } else if((this.list.get(i).equals("-")) && (list.get(i + 1).equals("-"))){
+                list.set(i , "-1");
+                list.add(i + 1, "*");
                 i--;
-            }
-            else if((i > 0) && c.include(list.get(i), c.allOperators) && (list.get(i + 1).equals("-"))){
-                this.list.set(i + 1, "-1");
-                this.list.add(i + 2, "*");
+            } else if((i > 0) && c.include(list.get(i), c.allOperators) && (list.get(i + 1).equals("-"))){
+                list.set(i + 1, "-1");
+                list.add(i + 2, "*");
             }
         }
     }
-    /*private void workingOnMinuses2(){
-        Compariable c = new Compariable();
-        for (int i = 0; (i < this.list.size() - 1) && (this.list.size() > 1); i++) {
-            if(i == 0 && list.get(i).equals("-") && list.get(i + 1).equals("-")){
-               list.remove(i);
-               list.remove(i);
-            } else if( i > 0 && c.include(list.get(i), c.bracketsOperators) && list.get(i + 2).equals("-") && list.get(i + 1).equals("-")){
-               list.remove(i + 1);
-               list.remove(i + 1);
-               i--;
-            } else if(i == 1  && list.get(0).equals("-") && list.get(1).equals("-")){
-                list.remove(1);
-                list.remove(0);
-                i--;
-            } else if(c.includeDigits(list.get(i)) && list.get(i + 1).equals("-") && list.get(i + 2).equals("-")){
-                list.set(i + 1, "+");
-                list.remove(i + 2);
-            } else if(list.get(i + 1).equals("-") && !list.get(i).equals("-") && c.include(list.get(i) , c.allOperators)){
-                list.set(i + 1, "-1");
-                list.add(i + 2, "*");
-            } else if(!list.get(i).equals("-") && c.include(list.get(i), list.get(i + 1), c.allOperators)){
-                list.remove(i);
-                i--;
-            } else if(list.get(i).equals("-") && c.includeDigits(list.get(i + 1)) && !list.get(i -1).equals("-")){
-                list.set(i + 1, convertFromDubToSt(-1.0 * convertFromStToDub(list.get(i + 1))));
-                list.remove(i);
-            } else if(list.get(i).equals("-") && c.include(list.get(i + 1), c.bracketsOperators)){
-                list.set(i, "-1");
-                list.add(i + 1, "*");
-            } else if(i > 2 && c.includeDigits(list.get(i)) && list.get(i - 1).equals("-") && c.includeDigits(list.get(i - 2), c.allOperators)){
-                list.set(i - 1, "-1");
-                list.add(i, "*");тут не те списки в условии
-            }
-        }
-    }*/
 
     //Вычисления
     //Вычисление умножения
@@ -224,10 +183,6 @@ public class Calculator {
     private int convertFromStToInt(String ch){
         return Integer.parseInt(ch);
     }
-    //Конвертация числа из типа int в строку
-    private String convertFromIntToSt(int ch){
-        return String.valueOf(ch);
-    }
     //Конвертация числа из строкив тип double
     private double convertFromStToDub(String ch) {
         return Double.parseDouble(ch);
@@ -275,8 +230,7 @@ public class Calculator {
                     if(!((convertFromStToInt(list.get(i + 1)) % 180 == 0) && (list.get(i + 1).equals("0")))) {
                         var result = operator(0, "ctg", convertFromStToDub(list.get(i + 1)));
                         return new Result(convertFromDubToSt(result), i);
-                    }
-                    else{
+                    } else{
                         throw new ArithmeticException("Такого котангенса не существует(комплексные числа, привет)");
                     }
                 }
@@ -292,8 +246,7 @@ public class Calculator {
                     if (!list.get(index - 1).startsWith("-")) {
                         var result = operator(convertFromStToDub(list.get(index - 1)), "root", convertFromStToDub(list.get(index + 1)));
                         return new Result(convertFromDubToSt(result), index);
-                    }
-                    else {
+                    } else {
                         throw new ArithmeticException("Подкорневое выражение не может быть меньше нуля");
                     }
                 }
@@ -309,8 +262,7 @@ public class Calculator {
                     if (!list.get(index + 1).equals("0")){
                         var result = operator(convertFromStToDub(list.get(index - 1)), "/", convertFromStToDub(list.get(index + 1)));
                         return new Result(convertFromDubToSt(result), index);
-                    }
-                    else{
+                    } else{
                         throw new ArithmeticException("Нельзя делить на ноль, ибо я еще не знаю, что такое комплексные числа, поэтому и тебе нельзя");
                     }
                 }
@@ -321,8 +273,7 @@ public class Calculator {
                 if (list.get(index).equals("+") && index != 0) {
                     var result = operator(convertFromStToDub(list.get(index-1)), "+", convertFromStToDub(list.get(index+1)));
                     return new Result(convertFromDubToSt(result), index);
-                }
-                else if (list.get(index).equals("-") && index != 0) {
+                } else if (list.get(index).equals("-") && index != 0) {
                     var result = operator(convertFromStToDub(list.get(index-1)), "-", convertFromStToDub(list.get(index+1)));
                     return new Result(convertFromDubToSt(result), index);
                 }
@@ -341,8 +292,7 @@ public class Calculator {
                 if(cut.list.size() == 1){
                     res = new Result(cut.list.get(0), 0);
                     changeResultInAbs(res, cut, list);
-                }
-                else {
+                } else {
                     while (cut.list.size() > 1) {
                         if (existSkobka(cut.list)) {
                             calc(cut.list);
@@ -359,8 +309,7 @@ public class Calculator {
                 if(cut.list.size() == 1){
                     res = new Result(cut.list.get(0), cut.opbrackets);
                     changeResultInBrackets(res, cut, list);
-                }
-                else {
+                } else {
                     while (cut.list.size() > 1) {
                         res = this.run(cut.list);
                         changeResult(res, cut.list);
