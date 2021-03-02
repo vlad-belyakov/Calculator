@@ -37,9 +37,18 @@ public class Compariable {
         add("(");
         //add(")");
     }};
-
+    protected final ArrayList<String> OpBracketsOperators = new ArrayList<>()
+    {{
+        add("[");
+        add("(");
+    }};
+    protected final ArrayList<String> ClBracketsOperators = new ArrayList<>()
+    {{
+        add("]");
+        add(")");
+    }};
     //Есть ли определенные символы в строке
-    protected boolean include(String b, ArrayList<String> list){
+    protected boolean ravno(String b, ArrayList<String> list){
         boolean check = false;
         for(int i = 0; i < list.size() - 1; i++){
             if(b.equals(list.get(i))){
@@ -50,7 +59,7 @@ public class Compariable {
         return check;
     }
 
-    protected boolean include(String b, String a, ArrayList<String> list){
+    protected boolean ravno(String b, String a, ArrayList<String> list){
         boolean check = false;
         for(int i = 0; i < list.size() - 1; i++){
             if(b.equals(a) && b.equals(list.get(i))){
@@ -72,7 +81,7 @@ public class Compariable {
         return check;
     }
 
-    protected boolean include(String b, ArrayList<String> list, ArrayList<String> list2){
+    protected boolean ravno(String b, ArrayList<String> list, ArrayList<String> list2){
         boolean check = false;
         boolean check2 = false;
         for(int i = 0; i < list.size() - 1; i++){
@@ -87,6 +96,6 @@ public class Compariable {
                 break;
             }
         }
-        return check && check2 == true;
+        return check && check2;
     }
 }

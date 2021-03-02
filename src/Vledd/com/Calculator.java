@@ -20,7 +20,9 @@ public class Calculator {
 
         this.list = new ArrayList<>(Arrays.asList(linee));
         deletingVoids();
+        deletingSpaces();
         workingOnMinuses();
+        workingOnBrackets();
     }
     //Добавление пробелов в выражние для его дальнейшего раздробления в массив для работы
     private String spaces(String a) {
@@ -30,15 +32,15 @@ public class Calculator {
         a = a.replace("*", " * ");
         a = a.replace("^", " ^ ");
         a = a.replace("root", " root ");
-        a = a.replace("(", "( ");
-        a = a.replace(")", " )");
+        a = a.replace("(", " ( ");
+        a = a.replace(")", " ) ");
         a = a.replace("=", " =");
         a = a.replace("sin", " sin ");
         a = a.replace("cos", " cos ");
         a = a.replace("tg", " tg ");
         a = a.replace("ctg", " ctg ");
-        a = a.replace("[", "[ ");
-        a = a.replace("]", " ]");
+        a = a.replace("[", " [ ");
+        a = a.replace("]", " ] ");
         return a;
     }
     //Ошибки
@@ -63,9 +65,9 @@ public class Calculator {
             if(i == 0 && list.get(i).equals("-") && list.get(i + 1).equals("-")){
                 list.remove(i);
                 list.remove(i);
-            } else if(i == 1 && c.includeDigits(list.get(i)) && list.get(i - 1).equals("-")){
-                list.set(i - 1, "-1");
-                list.add(i , "*");
+            } else if(i == 1 && c.includeDigits(list.get(1)) && list.get(0).equals("-")){
+                list.set(0, "-1");
+                list.add(1 , "*");
             } else if(i == 1  && list.get(0).equals("-") && list.get(1).equals("-")) {
                 list.remove(1);
                 list.remove(0);
@@ -73,20 +75,38 @@ public class Calculator {
             } else if ((!c.includeDigits(list.get(i))) && (list.get(i + 1).equals("-"))) {
                 list.set(i + 1, "-1");
                 list.add(i + 2, "*");
-            } else if((c.include(list.get(i), c.bracketsOperators)) &&(list.get(i + 1).equals("-"))){
+            } else if((c.ravno(list.get(i), c.bracketsOperators)) &&(list.get(i + 1).equals("-"))){
                 list.set(i + 1, "-1");
                 list.add(i + 2, "*");
             } else if((this.list.get(i).equals("-")) && (list.get(i + 1).equals("-"))){
                 list.set(i , "-1");
                 list.add(i + 1, "*");
                 i--;
-            } else if((i > 0) && c.include(list.get(i), c.allOperators) && (list.get(i + 1).equals("-"))){
+            } else if((i > 0) && c.ravno(list.get(i), c.allOperators) && (list.get(i + 1).equals("-"))){
                 list.set(i + 1, "-1");
                 list.add(i + 2, "*");
             }
         }
     }
-
+    //этот метод не выполняет свою роль, хз почему
+    private void workingOnBrackets(){
+        Compariable c = new Compariable();
+        for (int i = 0; i < list.size() - 1; i++) {
+            if(i != list.size() - 1 && c.includeDigits(list.get(i)) && c.ravno(list.get(i + 1), c.OpBracketsOperators)){
+                list.add(i + 1, "*");
+            }
+            else if(i != list.size() - 1 && c.includeDigits(list.get(i + 1)) && c.ravno(list.get(i), c.ClBracketsOperators)){
+                list.add(i,"*");
+            }
+        }
+    }
+    private void deletingSpaces(){
+        for (int i = 0; (i < list.size() - 1); i++){
+            if(i != list.size() - 1 && list.get(i).equals(" ") && list.get(i + 1).equals(" ")){
+                list.remove(i + 1);
+            }
+        }
+    }
     //Вычисления
     //Вычисление умножения
     private double multiplication(double a,double b){
@@ -210,29 +230,29 @@ public class Calculator {
     private Result run(ArrayList<String> list)  {
         while(checkOperators("sin", list) || checkOperators("cos", list) || checkOperators("tg", list) || checkOperators("ctg", list)) {
             for (int i=0; i < list.size(); i++) {
-                if (list.get(i).equals("sin")) {
-                    var result = operator(0, "sin", convertFromStToDub(list.get(i+1)));
-                    return new Result(convertFromDubToSt(result), i);
-                }
-                else if (list.get(i).equals("cos")) {
-                    var result = operator(0, "cos", convertFromStToDub(list.get(i+1)));
-                    return new Result(convertFromDubToSt(result), i);
-                }
-                else if (list.get(i).equals("tg")) {
-                    if(!(convertFromStToInt(list.get(i + 1)) % 90 == 0)) {
-                        var result = operator(0, "tg", convertFromStToDub(list.get(i + 1)));
+                switch (list.get(i)) {
+                    case "sin": {
+                        var result = operator(0, "sin", convertFromStToDub(list.get(i + 1)));
                         return new Result(convertFromDubToSt(result), i);
-                    } else {
-                        throw new ArithmeticException("Такого тангенса не существует(комплексные числа, привет)");
                     }
-                }
-                else if (list.get(i).equals("ctg")) {
-                    if(!((convertFromStToInt(list.get(i + 1)) % 180 == 0) && (list.get(i + 1).equals("0")))) {
-                        var result = operator(0, "ctg", convertFromStToDub(list.get(i + 1)));
+                    case "cos": {
+                        var result = operator(0, "cos", convertFromStToDub(list.get(i + 1)));
                         return new Result(convertFromDubToSt(result), i);
-                    } else{
-                        throw new ArithmeticException("Такого котангенса не существует(комплексные числа, привет)");
                     }
+                    case "tg":
+                        if (!(convertFromStToInt(list.get(i + 1)) % 90 == 0)) {
+                            var result = operator(0, "tg", convertFromStToDub(list.get(i + 1)));
+                            return new Result(convertFromDubToSt(result), i);
+                        } else {
+                            throw new ArithmeticException("Такого тангенса не существует(комплексные числа, привет)");
+                        }
+                    case "ctg":
+                        if (!((convertFromStToInt(list.get(i + 1)) % 180 == 0) && (list.get(i + 1).equals("0")))) {
+                            var result = operator(0, "ctg", convertFromStToDub(list.get(i + 1)));
+                            return new Result(convertFromDubToSt(result), i);
+                        } else {
+                            throw new ArithmeticException("Такого котангенса не существует(комплексные числа, привет)");
+                        }
                 }
             }
         }
