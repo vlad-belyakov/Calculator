@@ -9,19 +9,14 @@ public class Validate {
         this.primer = primer;
     }
     public void validateRun(){
+        Compariable c = new Compariable();
         if(primer.isEmpty())
             this.textError = "Введите хоть что-то";
         else if(containsChar(primer,'(') != containsChar(primer, ')')) {
             this.textError = "Кол-во открытых скобок не соотвествует кол-ву закрытых";
         }
-        else if(primer.endsWith("+") || primer.endsWith("-") || primer.endsWith("*") || primer.endsWith("/")){
+        else if(primer.endsWith("+") || primer.endsWith("-") || primer.endsWith("*") || primer.endsWith("/") || primer.endsWith("^")){
             this.textError = "Выражение имеет лишний оператор";
-        }
-        else if(!(primer.contains("0") || primer.contains("1") || primer.contains("2") || primer.contains("3") || primer.contains("4") || primer.contains("5") || primer.contains("6") || primer.contains("7") || primer.contains("8") || primer.contains("9"))){
-            this.textError = "Выражение не содержит чисел";
-        }
-        else if(checkInts(primer)) {
-            this.textError = "Выражение содержит только одно число";
         }
         else {
             this.existError = false;

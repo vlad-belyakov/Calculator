@@ -5,6 +5,13 @@ import java.util.ArrayList;
 public class Compariable {
     public Compariable(){
     }
+    protected final ArrayList<String> exitCommands = new ArrayList<>(){{
+        add("выход");
+        add("exit");
+        add("конец");
+        add("end");
+        add("оаоаоа");
+    }};
     protected final ArrayList<String> digits = new ArrayList<>(){{
         add("0");
         add("1");
@@ -19,7 +26,7 @@ public class Compariable {
     }};
     protected final ArrayList<String> allOperators = new ArrayList<>()
     {{
-        add("root");
+        add("√");
         add("^");
         add("*");
         add("+");
@@ -50,8 +57,8 @@ public class Compariable {
     //Есть ли определенные символы в строке
     protected boolean ravno(String b, ArrayList<String> list){
         boolean check = false;
-        for(int i = 0; i < list.size() - 1; i++){
-            if(b.equals(list.get(i))){
+        for (String s : list) {
+            if (b.equalsIgnoreCase(s)) {
                 check = true;
                 break;
             }
@@ -61,8 +68,8 @@ public class Compariable {
 
     protected boolean ravno(String b, String a, ArrayList<String> list){
         boolean check = false;
-        for(int i = 0; i < list.size() - 1; i++){
-            if(b.equals(a) && b.equals(list.get(i))){
+        for (String s : list) {
+            if (b.equalsIgnoreCase(a) && b.equalsIgnoreCase(s)) {
                 check = true;
                 break;
             }
@@ -72,8 +79,8 @@ public class Compariable {
 
     protected boolean includeDigits(String b){
         boolean check = false;
-        for(int i = 0; i < digits.size() - 1; i++){
-            if(b.endsWith(digits.get(i))){
+        for (String digit : digits) {
+            if (b.endsWith(digit)) {
                 check = true;
                 break;
             }
@@ -84,14 +91,14 @@ public class Compariable {
     protected boolean ravno(String b, ArrayList<String> list, ArrayList<String> list2){
         boolean check = false;
         boolean check2 = false;
-        for(int i = 0; i < list.size() - 1; i++){
-            if(b.equals(list.get(i))){
+        for (String s : list) {
+            if (b.equalsIgnoreCase(s)) {
                 check = true;
                 break;
             }
         }
-        for(int i = 0; i < list2.size() - 1; i++){
-            if(b.equals(list2.get(i))){
+        for (String s : list2) {
+            if (b.equalsIgnoreCase(s)) {
                 check2 = true;
                 break;
             }

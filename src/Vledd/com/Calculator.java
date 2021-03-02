@@ -23,6 +23,7 @@ public class Calculator {
         deletingSpaces();
         workingOnMinuses();
         workingOnBrackets();
+        workingOnOperators();
     }
     //Добавление пробелов в выражние для его дальнейшего раздробления в массив для работы
     private String spaces(String a) {
@@ -31,7 +32,9 @@ public class Calculator {
         a = a.replace("/", " / ");
         a = a.replace("*", " * ");
         a = a.replace("^", " ^ ");
-        a = a.replace("root", " root ");
+        a = a.replace("root", " √ ");
+        a = a.replace("корень", " √ ");
+        a = a.replace("√", " √ ");
         a = a.replace("(", " ( ");
         a = a.replace(")", " ) ");
         a = a.replace("=", " =");
@@ -88,21 +91,32 @@ public class Calculator {
             }
         }
     }
+    private void workingOnOperators() {
+        Compariable c = new Compariable();
+        for (int i = 0; i < list.size() - 1; i++) {
+            if(list.get(i).equals("√") && i == 0){
+                list.add(i, "2");
+            }
+            else if(list.get(i).equals("√") && !c.includeDigits(list.get(i - 1))){
+                list.add(i, "2");
+            }
+        }
+    }
     //этот метод не выполняет свою роль, хз почему
     private void workingOnBrackets(){
         Compariable c = new Compariable();
         for (int i = 0; i < list.size() - 1; i++) {
-            if(i != list.size() - 1 && c.includeDigits(list.get(i)) && c.ravno(list.get(i + 1), c.OpBracketsOperators)){
+            if(c.includeDigits(list.get(i)) && c.ravno(list.get(i + 1), c.OpBracketsOperators)){
                 list.add(i + 1, "*");
             }
             else if(i != list.size() - 1 && c.includeDigits(list.get(i + 1)) && c.ravno(list.get(i), c.ClBracketsOperators)){
-                list.add(i,"*");
+                list.add(i + 1,"*");
             }
         }
     }
     private void deletingSpaces(){
-        for (int i = 0; (i < list.size() - 1); i++){
-            if(i != list.size() - 1 && list.get(i).equals(" ") && list.get(i + 1).equals(" ")){
+        for (int i = 0; i < list.size() - 1; i++){
+            if(list.get(i).equals(" ") && list.get(i + 1).equals(" ")){
                 list.remove(i + 1);
             }
         }
@@ -140,8 +154,8 @@ public class Calculator {
     }
     //Вычисление корня
     private double root(double a, double b){
-        var res = Math.pow(a, 1/b);
-        System.out.println((b + "√" + a + " = " + res).replace(".0", ""));
+        var res = Math.pow(b, 1/a);
+        System.out.println((a + "√" + b + " = " + res).replace(".0", ""));
         return res;
     }
     //Тригонометрические функции
@@ -183,7 +197,7 @@ public class Calculator {
                 return subtraction(a, b);
             case "^":
                 return level(a, b);
-            case "root":
+            case "√":
                 return root(a, b);
             case "sin":
                 return sinus(b);
@@ -228,6 +242,7 @@ public class Calculator {
     }
     //Отправка "мини" выражений, исходя из операторов
     private Result run(ArrayList<String> list)  {
+        Compariable c = new Compariable();
         while(checkOperators("sin", list) || checkOperators("cos", list) || checkOperators("tg", list) || checkOperators("ctg", list)) {
             for (int i=0; i < list.size(); i++) {
                 switch (list.get(i)) {
@@ -256,17 +271,17 @@ public class Calculator {
                 }
             }
         }
-        while(checkOperators("^", list) || checkOperators("root", list)) {
+        while(checkOperators("^", list) || checkOperators("√", list)) {
             for (int index=0; index < list.size(); index++) {
                 if (list.get(index).equals("^") && index != 0) {
                     var result = operator(convertFromStToDub(list.get(index-1)), "^", convertFromStToDub(list.get(index+1)));
                     return new Result(convertFromDubToSt(result), index);
                 }
-                else if (list.get(index).equals("root") && index != 0) {
-                    if (!list.get(index - 1).startsWith("-")) {
-                        var result = operator(convertFromStToDub(list.get(index - 1)), "root", convertFromStToDub(list.get(index + 1)));
+                else if (list.get(index).equals("√") && index != 0) {
+                    if (!list.get(index + 1).startsWith("-")) {
+                        var result = operator(convertFromStToDub(list.get(index - 1)), "√", convertFromStToDub(list.get(index + 1)));
                         return new Result(convertFromDubToSt(result), index);
-                    } else {
+                    }  else {
                         throw new ArithmeticException("Подкорневое выражение не может быть меньше нуля");
                     }
                 }
