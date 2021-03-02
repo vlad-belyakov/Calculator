@@ -20,19 +20,14 @@ public class Build {
         System.out.println("Введите ваше выражение");
 
         boolean True = true;
-        loop:
         while(True) {
             BufferedReader sc = new BufferedReader(new InputStreamReader(System.in));
             String line = sc.readLine();
 
             if (!c.ravno(line, c.exitCommands)) {
                 var calc = new Calculator(line);
-
                 System.out.println("Ответ : " + calc.calc(calc.list).getResult());
-                continue loop;
-            } else {
-                True = false;
-            }
+            } else True = false;
 
         }
         System.out.println("Прекращение работы калькулятора");
