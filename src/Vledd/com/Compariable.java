@@ -26,6 +26,8 @@ public class Compariable {
     }};
     protected final ArrayList<String> allOperators = new ArrayList<>()
     {{
+        add("root");
+        add("корень");
         add("√");
         add("^");
         add("*");

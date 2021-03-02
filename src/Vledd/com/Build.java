@@ -13,10 +13,11 @@ public class Build {
                 System.out.print(c.allOperators.get(i) + "  |  ");
             }
             else{
-                System.out.println(c.allOperators.get(i) + "  |  ");
+                System.out.println(c.allOperators.get(i) + "  |  \n");
             }
         }
 
+        System.out.println("Для остановки приложения напишите \"выход\"\n");
         System.out.println("Введите ваше выражение");
 
         boolean True = true;
@@ -27,8 +28,10 @@ public class Build {
             if (!c.ravno(line, c.exitCommands)) {
                 var calc = new Calculator(line);
                 System.out.println("Ответ : " + calc.calc(calc.list).getResult());
-            } else True = false;
-
+            } else {
+                sc.close();
+                True = false;
+            }
         }
         System.out.println("Прекращение работы калькулятора");
     }
